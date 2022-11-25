@@ -1,0 +1,1071 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 12,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 30,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureMonitor": {
+            "aggregation": "Count",
+            "allowedTimeGrainsMs": [
+              60000,
+              300000,
+              900000,
+              1800000,
+              3600000,
+              21600000,
+              43200000,
+              86400000
+            ],
+            "dimensionFilters": [],
+            "metricName": "traces/count",
+            "metricNamespace": "microsoft.insights/components",
+            "resourceGroup": "YOURRESOURCEGROUP",
+            "resourceName": "YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Monitor",
+          "refId": "A",
+          "subscription": "YOURSUBSCRIPTIONID"
+        }
+      ],
+      "title": "Traces injected during the day",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 5,
+      "options": {
+        "displayLabels": [
+          "name"
+        ],
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "pageViews\n| extend\nalObjectId = tostring(customDimensions.alObjectId),\nalObjectIdINT = customDimensions.alObjectId\n, alObjectName = tostring(customDimensions.alObjectName)\n, alObjectType = tostring(customDimensions.alObjectType)\n, eventId = customDimensions.eventID // note that this is different from other signal\n, pageType = customDimensions.pageType\n, durationInMs = duration\n| where alObjectIdINT > 0\n| summarize count() by alObjectId, alObjectType, alObjectName\n| project alObjectName, count_\n| order by count_ desc \n| limit 10\n",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "time_series"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "YOURSUBSCRIPTIONID"
+        }
+      ],
+      "title": "Page Views (Top 10)",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 6,
+      "lines": false,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "graphMode": "none",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "vertical",
+        "pieType": "pie",
+        "showValue": "auto",
+        "stacking": "normal",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "points": false,
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\n| where customDimensions.eventId == 'RT0008' and timestamp > ago(3d)\n| extend category = tostring( customDimensions.category )\n| summarize request_count=count() by category, bin(timestamp, 1d)\n| render columnchart \n| limit 10 \n",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "YOURSUBSCRIPTIONID"
+        }
+      ],
+      "title": "Web Service calls per day",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 40,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1000
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 20,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "median_load_time_in_MS",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "pageViews\r\n| where timestamp > ago(1d)\r\n| extend alObjectId = toint(customDimensions.alObjectId)\r\n| where alObjectId between (50000 .. 99999) or alObjectId between (1000000 .. 74999999)\r\n| extend objectId = tostring(customDimensions.alObjectId)\r\n| extend codeOwnership = case(\r\n      alObjectId between (50000 .. 99999), 'ENVIRONMENT'\r\n    , alObjectId between (1000000 .. 69999999), 'ISV_ONPREM'\r\n    , alObjectId between (70000000 .. 74999999), 'ISV_ONLINE'\r\n    , 'MICROSOFT'\r\n)\r\n| summarize median_load_time_in_MS = percentile(duration,50) by pageName=name, objectId\r\n| order by median_load_time_in_MS desc\r\n| limit 10",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "dimensionFilters": [],
+            "metricNamespace": "microsoft.insights/components",
+            "resourceGroup": "YOURRESOURCEGROUP",
+            "resourceName": "YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "YOURSUBSCRIPTIONID"
+        }
+      ],
+      "title": "Top 10 longest page times (partner-added pages)",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 16,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(3d)\r\n    and customDimensions.eventId == 'RT0005'\r\n| extend alObjectId = toint(customDimensions.alObjectId)\r\n       , alObjectName = tostring(customDimensions.alObjectName)\r\n       , extensionId = tostring( customDimensions.extensionId )\r\n       , extensionName = tostring( customDimensions.extensionName )\r\n       , extensionVersion = tostring( customDimensions.extensionVersion )       \r\n       , executionTimeInSec = toreal(totimespan(customDimensions.executionTime))/10000/1000 //the datatype for executionTime is timespan \r\n| where alObjectId between (50000 .. 99999) or alObjectId between (1000000 .. 74999999)\r\n| extend codeOwnership = case(\r\n      alObjectId between (50000 .. 99999), 'ENVIRONMENT'\r\n    , alObjectId between (1000000 .. 69999999), 'ISV_ONPREM'\r\n    , alObjectId between (70000000 .. 74999999), 'ISV_ONLINE'\r\n    , 'MICROSOFT'\r\n)\r\n| summarize count(), avg(executionTimeInSec) by objectId=alObjectId, objectName=alObjectName, extensionId, extensionName, extensionVersion, codeOwnership\r\n| limit 20",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 20 most expensive long running sql queries (in partner code)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 44,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1000
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 22,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "medianExecutionTimeInMS",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "alObjectName",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(1d)\r\n    and customDimensions.eventId == 'RT0005'\r\n    and customDimensions.alObjectId != '0'\r\n| extend sqlStatement = tostring(customDimensions.sqlStatement)\r\n, alObjectId = tostring(customDimensions.alObjectId)\r\n, alObjectName = tostring( customDimensions.alObjectName )\r\n, alObjectType = customDimensions.alObjectType\r\n, alStackTrace = customDimensions.alStackTrace\r\n, executionTimeInMS = toreal(totimespan(customDimensions.executionTime))/10000 //the datatype for executionTime is timespan \r\n, extensionName = tostring( customDimensions.extensionName )\r\n| where  alObjectId <> ''\r\n| summarize medianExecutionTimeInMS=percentile(executionTimeInMS, 50) by alObjectId, alObjectName, extensionName\r\n| order by medianExecutionTimeInMS desc\r\n| limit 10",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "dimensionFilters": [],
+            "metricNamespace": "microsoft.insights/components",
+            "resourceGroup": "YOURRESOURCEGROUP",
+            "resourceName": "YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "YOURSUBSCRIPTIONID"
+        }
+      ],
+      "title": "Top 10 objects with long running sql queries",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 4,
+      "options": {
+        "footer": {
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(10d) and customDimensions.eventId in ('RT0010', 'LC0010', 'LC0011', 'LC0012', 'LC0013', 'LC0014', 'LC0015', 'LC0016', 'LC0017', 'LC0018', 'LC0019', 'LC0020', 'LC0021', 'LC0022', 'LC0023')    \r\n| extend aadTenantId=tostring( customDimensions.aadTenantId)\r\n       , environmentName=tostring( customDimensions.environmentName )\r\n       , extensionId=tostring( customDimensions.extensionId )\r\n       , extensionName=tostring( customDimensions.extensionName)\r\n       , extensionPublisher=tostring( customDimensions.extensionPublisher)\r\n       , extensionVersion=tostring( customDimensions.extensionVersion)\r\n       , eventId=tostring( customDimensions.eventId)\r\n       , extensionScope=tostring( customDimensions.extensionScope)\r\n       , extensionPublishedAs=tostring( customDimensions.extensionPublishedAs)\r\n       , result=tostring( customDimensions.result)\r\n       , extensionCompilationResult=tostring( customDimensions.extensionCompilationResult)\r\n       , failureReason=tostring( customDimensions.failureReason)\r\n       , extensionSynchronizationMode=tostring( customDimensions.extensionSynchronizationMode)\r\n       , doNotSaveData=tostring( customDimensions.doNotSaveData)\r\n| extend eventMessageShort=case(\r\n              eventId=='RT0010', 'FAILED to Update with exception raised in upgrade code'\r\n            , eventId=='LC0010', 'installed successfully'\r\n            , eventId=='LC0011', 'FAILED to install'\r\n            , eventId=='LC0012', 'synchronized successfully'            \r\n            , eventId=='LC0013', 'FAILED to synchronize'            \r\n            , eventId=='LC0014', 'published successfully'            \r\n            , eventId=='LC0015', 'FAILED to publish'            \r\n            , eventId=='LC0016', 'un-installed successfully'            \r\n            , eventId=='LC0017', 'FAILED to un-install'            \r\n            , eventId=='LC0018', 'unpublished successfully'\r\n            , eventId=='LC0019', 'FAILED to un-publish'\r\n            , eventId=='LC0020', 'compiled successfully'\r\n            , eventId=='LC0021', 'FAILED to compile'\r\n            , eventId=='LC0022', 'updated successfully'\r\n            , eventId=='LC0023', 'FAILED to update'\r\n            , strcat( eventId, 'Unknown message'))\r\n| project timestamp, extensionName, extensionId, extensionPublisher, extensionVersion, eventId, eventMessageShort, \r\n          extensionScope, extensionPublishedAs, result, extensionCompilationResult, failureReason, \r\n          extensionSynchronizationMode, doNotSaveData\r\n| order by timestamp desc, extensionName,extensionId,extensionPublisher,extensionVersion\r\n",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "hide": false,
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "title": "Extension Lifecycle",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 44,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 2,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "id": 18,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "colorByField": "avg",
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(1d)\r\n    and customDimensions.eventId == 'RT0006'\r\n| extend alObjectId = toint(customDimensions.alObjectId)\r\n| where alObjectId between (50000 .. 99999) or alObjectId between (1000000 .. 74999999)\r\n| extend reportName = tostring( customDimensions.alObjectName )\r\n       , executionTimeInSec = toreal(totimespan(customDimensions.totalTime))/10000000 //the datatype for executionTime is timespan \r\n| where reportName <> ''\r\n| extend codeOwnership = case(\r\n      alObjectId between (50000 .. 99999), 'ENVIRONMENT'\r\n    , alObjectId between (1000000 .. 69999999), 'ISV_ONPREM'\r\n    , alObjectId between (70000000 .. 74999999), 'ISV_ONLINE'\r\n    , 'MICROSOFT'\r\n)\r\n| summarize avg=avg(executionTimeInSec)\r\n  by reportName\r\n| order by avg\r\n| limit 10",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "title": "Execution time of (partner) reports by report name",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "id": 14,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(1d) and customDimensions.eventId == 'RT0010'  //Extension Upgrade failure\r\n| count",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "title": "Extensions Upgrade failures",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "id": 8,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(1d) and customDimensions.eventId == 'AL0000E26' // job queue finished\r\n| count",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "customNamespace": "microsoft.insights/components",
+            "dimensionFilters": [],
+            "metricNamespace": "microsoft.insights/components",
+            "resourceGroup": "YOURRESOURCEGROUP",
+            "resourceName": "YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A",
+          "subscription": "YOURSUBSCRIPTIONID"
+        }
+      ],
+      "title": "Job queue tasks completed in this day",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 12,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(1d) and customDimensions.eventId == 'AL0000HE7' // job queue errors\r\n| count",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME",
+            "resultFormat": "table"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "title": "Job Queue errors in last day",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-azure-monitor-datasource",
+        "uid": "YdztdMvVk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 55,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "id": 24,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "xField": "eventType",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "9.1.8.1",
+      "targets": [
+        {
+          "azureLogAnalytics": {
+            "query": "traces\r\n| where timestamp > ago(1d)\r\n    and customDimensions.eventId in ('RT0010', 'LC0010', 'LC0011', 'LC0012', 'LC0013', 'LC0014', 'LC0015', 'LC0016', 'LC0017', 'LC0018', 'LC0019', 'LC0020', 'LC0021', 'LC0022', 'LC0023')    \r\n| extend aadTenantId=tostring( customDimensions.aadTenantId)\r\n       , environmentName=tostring( customDimensions.environmentName )\r\n       , extensionId=tostring( customDimensions.extensionId )\r\n       , eventId=tostring(customDimensions.eventId)\r\n| extend eventMessageShort= strcat( case(\r\n              eventId=='RT0010', 'Update failed (upgrade code)'\r\n            , eventId=='LC0011', 'Install failed'\r\n            , eventId=='LC0012', 'Synch succeeded'\r\n            , eventId=='LC0013', 'Synch failed'           \r\n            , eventId=='LC0014', 'Publish succeeded'\r\n            , eventId=='LC0015', 'Publish failed'\r\n            , eventId=='LC0016', 'Un-install succeeded'\r\n            , eventId=='LC0017', 'Un-install failed'\r\n            , eventId=='LC0018', 'Un-publish succeeded'\r\n            , eventId=='LC0019', 'Un-publish failed'\r\n            , eventId=='LC0020', 'Compilation succeeded'\r\n            , eventId=='LC0021', 'Compilation failed'\r\n            , eventId=='LC0022', 'Update succeeded'\r\n            , eventId=='LC0023', 'Update failed (other)'\r\n            ,                    'Unknown message'\r\n         ), \" (\", eventId, ')'  )\r\n| summarize count=count() by eventType=eventMessageShort\r\n| order by eventType",
+            "resource": "/subscriptions/YOURSUBSCRIPTIONID/resourceGroups/YOURRESOURCEGROUP/providers/microsoft.insights/components/YOURAPPLICATIONINSIGHTSINSTANCENAME"
+          },
+          "azureMonitor": {
+            "allowedTimeGrainsMs": [],
+            "timeGrain": "auto"
+          },
+          "datasource": {
+            "type": "grafana-azure-monitor-datasource",
+            "uid": "YdztdMvVk"
+          },
+          "queryType": "Azure Log Analytics",
+          "refId": "A"
+        }
+      ],
+      "title": "Extensions lifecycle events overview",
+      "type": "barchart"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "D365BC TELEMETRY DASHBOARD",
+  "uid": "Kdp8dMv4z",
+  "version": 24,
+  "weekStart": ""
+}
